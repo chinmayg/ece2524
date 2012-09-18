@@ -11,28 +11,28 @@ args = parser.parse_args()
 product = 1.0
 
 try:
-	for line in fileinput.input(args.files):
-		if args.ignore_blank:
-			if line != "\n":
-				product = product * float(line)
-		elif args.ignore_non_numeric:
-			try:
-				product = product * float(line)
-			except ValueError:
-				product = product
-		elif args.ignore_blank and args.ignore_non_numeric:
-			if line != "\n":
+		for line in fileinput.input(args.files):
+			if args.ignore_blank:
+				if line != "\n":
+					product = product * float(line)
+			elif args.ignore_non_numeric:
 				try:
 					product = product * float(line)
-				except:
+				except ValueError:
 					product = product
-		else:	
-			if line == "\n":
-				print product
-				product = 1.0
-			else:
-				product = product * float(line)
-	print product
+			elif args.ignore_blank and args.ignore_non_numeric:
+				if line != "\n":
+					try:
+						product = product * float(line)
+					except:
+						product = product
+			else:	
+				if line == "\n":
+					print product
+					product = 1.0
+				else:
+					product = product * float(line)
+		print product
 except ValueError as e:
     s = str(e)
     sys.stderr.write(s)
