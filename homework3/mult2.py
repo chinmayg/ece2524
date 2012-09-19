@@ -13,10 +13,10 @@ product = 1.0
 
 try:
 	for line in fileinput.input(args.files):
-		if args.ignore_blank:
+		if args.ignore_blank and not args.ignore_non_numeric:
 			if line != "\n":
 				product = product * float(line)
-		elif args.ignore_non_numeric:
+		elif args.ignore_non_numeric and not args.ignore_blank:
 			try:
 				product = product * float(line)
 			except ValueError:
