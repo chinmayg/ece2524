@@ -98,13 +98,12 @@ def writeInventoryToFile(fileName,inventory):
 	f.close()
 #main Method
 def main():
-	parser = argparse.ArgumentParser(description='This is an inventory database program.')
-	parser.add_argument('-f', '--data-file',help = 'path to the data file to read at startup')
-	args = parser.parse_args()
-	inventory = []
-	if args.data_file:
-		fileName = args.data_file
-		createInventory(fileName[0],inventory)
+	try:
+		parser = argparse.ArgumentParser(description='This is an inventory database program.')
+		parser.add_argument('-f', '--data-file',help = 'path to the data file to read at startup')
+		args = parser.parse_args()
+		inventory = []
+		createInventory(args.data_file,inventory)
 		for line in sys.stdin:
 			cmd, cmdInfo = parseTheCommand(line)
 			if cmd == 'add':
@@ -118,9 +117,10 @@ def main():
 			else:
 				print "didn't understand command"
 		writeInventoryToFile(args.data_file,inventory)
-	else:
-		sys.stderr.write("Please check the usage of this function. Use the -h or --help option\n")
-		sys.exit(1)
+	except IOError as e:
+	        s = str(e)
+                sys.stderr.write(s)
+                sys.exit(1)
 	sys.exit(0)
 if  __name__ =='__main__':main()
 
