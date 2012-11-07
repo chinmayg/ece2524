@@ -7,14 +7,14 @@ exprtest: exprtest.o parser.tab.o driver.o scanner.o
 exprtest.o: exprtest.cpp expression.hpp driver.hpp
 	g++ -Wall -MMD -c exprtest.cpp
 
-parser.tab.o: expression.hpp scanner.hpp driver.hpp
+parser.tab.o: parser.ypp expression.hpp scanner.hpp driver.hpp
 	bison parser.ypp
 	g++ -Wall -MMD -c parser.tab.cpp
 
 driver.o: driver.cpp driver.hpp scanner.hpp
 	g++ -Wall -MMD -c driver.cpp
 
-scanner.o: scanner.ll scanner.hpp
+scanner.o: scanner.ll scanner.hpp parser.tab.hpp
 	flex -t scanner.ll > scanner.cpp
 	g++ -Wall -MMD -c scanner.cpp
 
