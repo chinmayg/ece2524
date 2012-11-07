@@ -19,4 +19,4 @@ scanner.o: scanner.ll scanner.hpp
 	g++ -Wall -MMD -c scanner.cpp
 
 clean:
-	rm -f *.o *.d *~ *.hh parser.cc parser.h scanner.cpp FlexLexer.h parser.tab.cpp parser.tab.hpp rm exprtest
+	rm -f *.o *.d *~ *.hh parser.cc parser.h scanner.cpp FlexLexer.h parser.tab.cpp parser.tab.hpp exprtest
