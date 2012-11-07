@@ -1,4 +1,4 @@
-#Make file for calculator parser
+#Make file for Homework 5
 all: exprtest
 
 exprtest: exprtest.o parser.tab.o driver.o scanner.o
