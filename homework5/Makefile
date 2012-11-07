@@ -1,7 +1,7 @@
 #Make file for calculator parser
-all: exprTest
+all: exprtest
 
-exprTest: exprtest.o parser.tab.o driver.o scanner.o
+exprtest: exprtest.o parser.tab.o driver.o scanner.o
 	g++ -Wall -g -MMD -o exprtest exprtest.o driver.o parser.tab.o scanner.o
 
 exprtest.o: exprtest.cpp expression.hpp driver.hpp
