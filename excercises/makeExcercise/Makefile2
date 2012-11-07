@@ -1,0 +1,7 @@
+# Makefile 2
+myprog: main.o iodat.o
+	g++ -Wall -g -o myprog main.o iodat.o
+main.o: main.cpp iodat.h
+	g++ -Wall -g -c main.cpp
+iodat.o: iodat.cpp iodat.h
+	g++ -Wall -g -c iodat.cpp

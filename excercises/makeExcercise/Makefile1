@@ -1,0 +1,2 @@
+myprog: main.cpp iodat.cpp iodat.h
+	g++ -Wall -g -o myprog main.cpp iodat.cpp
