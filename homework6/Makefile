@@ -23,4 +23,4 @@ dispatcher.o: dispatcher.cpp
 	${CC} ${CFLAGS} -c dispatcher.cpp
 
 clean:
-	rm -f *.o
+	rm -f *.o generator consumer dispatcher
