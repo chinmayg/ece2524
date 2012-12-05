@@ -39,12 +39,14 @@ Process::Process(const std::vector<std::string> &args)
 		dup2(CHILD_WRITE,1);
 		if (dup2(CHILD_WRITE, 1) < 0){
 			perror("dup2 CHILD_WRITE");
+			close(CHILD_WRITE);
 			throw std::string("dup2 CHILD_WRITE");
 		}
 		close(CHILD_WRITE);
 		dup2(CHILD_READ,0);
 		if (dup2(CHILD_READ, 0) < 0){
 			perror("dup2 CHILD_READ");
+			close(CHILD_READ);	
 			throw std::string("dup2 CHILD_READ");
 		} 
 		close(CHILD_READ);
