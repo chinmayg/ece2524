@@ -87,7 +87,7 @@ Process::~Process()
 
 void Process::write(const std::string& str)
 {
-	int error = ::write(PARENT_READ, str.c_str(), str.length());
+	int error = ::write(PARENT_WRITE, str.c_str(), str.length());
 	if(error < 0){
 		perror("Error: ~Write");
 		throw "Error: ~Write";
