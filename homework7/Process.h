@@ -1,10 +1,9 @@
 #include <unistd.h>
 #include <sys/wait.h>
-#include <stdio.h>
-#include <iostream>
+
 #include <string>
 #include <vector>
-#include <algorithm>
+
 class Process
 {
 public:

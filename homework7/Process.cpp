@@ -1,4 +1,6 @@
 #include "Process.h"
+#include <algorithm>
+#include <iostream>
 
 #define	PARENT_READ     readpipe[0]
 #define	CHILD_WRITE	readpipe[1]
@@ -64,7 +66,6 @@ Process::Process(const std::vector<std::string> &args)
 		std::cerr << "Process[" << pid()-1 <<"] Process constructor " << std::endl;
 		close(CHILD_READ);
 		close(CHILD_WRITE);
-		close(PARENT_WRITE);
 		m_pread = fdopen(PARENT_READ, "r");
 
 	}
@@ -73,14 +74,15 @@ Process::Process(const std::vector<std::string> &args)
 Process::~Process()
 {
 	int status;
-	pid_t pid = waitpid(m_pid, &status, 0);
-	if(pid < 0){
-        	perror("Error: ~Process waitpid");
-        	throw "Error: ~Process waitpid";
-    	}
-
+	
 	fclose(m_pread);
-
+	close(PARENT_WRITE);
+	close(PARENT_READ);
+        pid_t pid = waitpid(m_pid, &status, 0);
+        if(pid < 0){
+                perror("Error: ~Process waitpid");
+                throw "Error: ~Process waitpid";
+        }
 	// Kill the child process
 	kill(m_pid, SIGTERM);	
 }
@@ -102,6 +104,5 @@ std::string Process::readline()
 
 	getline(&buffer, &buffer_size, m_pread);
 	readLine = buffer;
-	std::cout << buffer << std::endl;
 	return readLine;
 }
