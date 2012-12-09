@@ -1,0 +1,9 @@
+Install packages:
+
+pip install beautifulsoup4
+install ClientCookie
+	python setup build
+	sudo python setup install
+install ClientForm
+	python setup build
+	sudo python setup install
