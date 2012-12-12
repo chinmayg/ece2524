@@ -12,29 +12,11 @@ logger.setLevel(logging.DEBUG)
 class YahooFFLReader:
     def __init__(self,name,pw):
         self.name = name
-        self.base_url = 'http://football.fantasysports.yahoo.com/'
-	self.base_league_url = "http://football.fantasysports.yahoo.com/f1/"
+        self.base_url = 'http://football.fantasysports.yahoo.com'
         self.pw = pw
         self.logged_in = False
 
     def login(self):
-        logger.info('Logging in')
-        if not self.logged_in:
-            return
-        cookieJar = ClientCookie.CookieJar()
-        opener = ClientCookie.build_opener(ClientCookie.HTTPCookieProcessor(cookieJar))
-        opener.addheaders = [("User-agent","Mozilla/5.0 (compatible)")]
-        ClientCookie.install_opener(opener)
-        fp = ClientCookie.urlopen("http://login.yahoo.com")
-        forms = ClientForm.ParseResponse(fp)
-        fp.close()
-        form = forms[0]
-        form["login"] = self.name
-        form["passwd"] = self.pw
-        fp = ClientCookie.urlopen(form.click())
-        fp.close()
-
-    def retrieve_leagues(self):
         logger.info('Retrieving leagues')
 	#Sets the client webbrowser
         cookieJar = ClientCookie.CookieJar()
@@ -42,7 +24,7 @@ class YahooFFLReader:
         opener.addheaders = [("User-agent","Mozilla/5.0 (compatible)")]
         ClientCookie.install_opener(opener)
 	#Opens the login page for yahoo.com
-        fp = ClientCookie.urlopen("http://login.yahoo.com")
+        fp = ClientCookie.urlopen("http://login.yahoo.com")                                         # &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
         forms = ClientForm.ParseResponse(fp)
         fp.close()
         form = forms[0]
@@ -50,6 +32,8 @@ class YahooFFLReader:
         form["passwd"] = self.pw
         fp = ClientCookie.urlopen(form.click())
         fp.close()
+
+    def get_info(self):
 	#Opens the main page of the fantasy football
         fp = ClientCookie.urlopen(self.base_url)
         lines = fp.readlines()
@@ -63,14 +47,28 @@ class YahooFFLReader:
         soup = BeautifulSoup(text)
 	#Finds the teams on the page
         team_info = soup.find('div', {'class':'teams'})
-        teams = {}
+    	if team_info is None:       # Check login (woonkill, 3 lines)
+    	    sys.stderr.write('Error: Login failed, parser limit exceeded or authentication failure, check username & password\n')
+    	    sys.exit(1)
 	#Stores the information about the users league
+        userTeams = []
+        userLeagueId = []
         for info in team_info.findAll('a', {'class':'team'}):
-            teams[info.string] = {'url' : info['href'],'league' : info['href']}
-        logger.info('Teams: ' + str(teams))
-        self.teams = teams
+            userTeams.append(info.string)
+            userLeagueId.append(info['href'])
+        logger.info('Team(s): ' + str(userTeams))
+        logger.info('League(s): ' + str(userLeagueId))
+        self.userTeams = userTeams
+        self.userLeagueId = userLeagueId
+
+    def retrieve_leagues(self, Choice):
+        LeagueId = self.userLeagueId[Choice]
+        LeagueSplit = LeagueId.split('/')
+        LeagueSplit.pop()           # Truncated the end portion to get base link
+        LeagueBase = "/".join(LeagueSplit)
 	#----> Option to pick the league you want to open <------#
-	fp = ClientCookie.urlopen("http://football.fantasysports.yahoo.com/f1/658285")
+	
+	fp = ClientCookie.urlopen(self.base_url + LeagueBase + "?lhst=stand#lhststand")
         lines = fp.readlines()
         fp.close()
         text = "\n".join(lines)
@@ -101,7 +99,10 @@ def main(name,pw):
     #num_pages = 10
     reader = YahooFFLReader(name,pw)
     print "Logged"
-    reader.retrieve_leagues()
+    reader.login()
+    reader.get_info()
+    Choice = 1
+    reader.retrieve_leagues(Choice)
     #time.sleep(5)
     #reader.retrieve_player_stats('192418',num_pages)
     #reader.write_stats()
@@ -109,4 +110,8 @@ def main(name,pw):
 if __name__ == "__main__":
     name = sys.argv[1]
     pw = sys.argv[2]
+    if len(sys.argv) != 3:          # Check parameters (woonkill, 3 lines)
+        sys.stderr.write('Error: Program needs three parameters (./Executable Username Password)\n')
+        sys.exit(1)
     main(name,pw)
+
