@@ -1,0 +1,8 @@
+Install the four packages below. The first one may not be necessary, but seems to simplify everything for the average user
+
+sudo apt-get install python-pip
+sudo pip install beautifulsoup4
+sudo pip install clientcookie
+sudo pip install clientform
+
+chmod +x gui.py
