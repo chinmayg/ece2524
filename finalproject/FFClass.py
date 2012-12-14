@@ -33,10 +33,6 @@ class YahooFFLReader:
         lines = fp.readlines()
         fp.close()
         text = "\n".join(lines)
-        # Stores all of the lines in a temp.html file
-        f = open('temp.html', 'w')
-        f.write(text)
-        f.close()
         # Use Beautiful Soup to parse the html.
         soup = BeautifulSoup(text)
         # Finds the teams on the page
