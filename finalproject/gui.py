@@ -1,3 +1,4 @@
+#!/usr/bin/python2
 import FFClass
 import re
 import sys
