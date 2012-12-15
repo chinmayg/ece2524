@@ -100,15 +100,17 @@ class YahooFFLReader:
         temp_list = []
         
         # Find the specific html portion with the players' names
-        for info in team_info.findAll('a', {'class' : 'name'}):
+        for info in team_info.findAll({'a', 'div'}, {'class' : {'name', 'emptyplayer'}}):
             playerNames.append(info.string)
         # Find the specific html portion with the players' positions
         for info in team_info.findAll('td', {'class' : 'pos first'}):
             playerPos.append(info.string)
         # Find the specific html portion with the team positions
-        for info in team_info.findAll('span'):
-            if info.string != None and info.string.find("(") != -1:
-                conditions.append(info.string)
+        for info in team_info.findAll('div', {'class' : {'emptyplayer', 'ysf-player-detail'}}, 'span'):
+            for moreinfo in info.findAll('span'):
+                if moreinfo.string != None and moreinfo.string.find("-") != -1:
+                    conditions.append(moreinfo.string)
+            
         i = 1
         # Find the specific html portion with the players' stats
         for info in team_info.findAll('td', {'class' : 'stat'}):
@@ -119,4 +121,3 @@ class YahooFFLReader:
             i = i + 1
 
         return (playerNames, playerPos, conditions, stats)
-
