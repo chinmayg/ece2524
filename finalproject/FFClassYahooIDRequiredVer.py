@@ -33,9 +33,6 @@ class YahooFFLReader:
         lines = fp.readlines()
         fp.close()
         text = "\n".join(lines)
-        with open("localfiles/homepage", 'r') as f:
-            text = f.read()
-        f.close()
         # Use Beautiful Soup to parse the html.
         soup = BeautifulSoup(text)
         # Finds the teams on the page
@@ -51,7 +48,7 @@ class YahooFFLReader:
             userLeagueId.append(info['href'])
         self.userTeams = userTeams
         self.userLeagueId = userLeagueId
-  return (userTeams, userLeagueId)
+	return (userTeams, userLeagueId)
 
     def retrieve_leagues(self, Choice):
         QuickFix = "?lhst=stand#lhststand"
@@ -61,9 +58,10 @@ class YahooFFLReader:
         LeagueBase = "/".join(LeagueSplit)
         
         #----> Option to pick the league you want to open <------#
-        with open("localfiles" + LeagueBase + QuickFix, 'r') as f:
-            text = f.read()
-        f.close()
+        fp = ClientCookie.urlopen(self.base_url + LeagueBase + QuickFix)
+        lines = fp.readlines()
+        fp.close()
+        text = "\n".join(lines)
         # Use Beautiful Soup to parse the html
         soup = BeautifulSoup(text)
         # Finds the teams on the page
@@ -85,9 +83,10 @@ class YahooFFLReader:
     def display_players(self, Choice):
         Id = self.LeagueTeamIds[Choice]
         
-        with open("localfiles" + Id, 'r') as f:
-            text = f.read()
-        f.close()
+        fp = ClientCookie.urlopen(self.base_url + Id)
+        lines = fp.readlines()
+        fp.close()
+        text = "\n".join(lines)
         # Use Beautiful Soup to parse the html
         soup = BeautifulSoup(text)
         # Finds the players on the page
@@ -122,3 +121,4 @@ class YahooFFLReader:
             i = i + 1
 
         return (playerNames, playerPos, conditions, stats)
+

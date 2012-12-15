@@ -6,3 +6,18 @@ sudo pip install clientcookie
 sudo pip install clientform
 
 chmod +x gui.py
+
+Configure the files based on how you wish to run the code.
+
+	1.Running Code Without Yahoo ID and Fantasy Football Team:
+	   -Download and untar the localfile tarball. Make sure you extract into the same directory as the gui.py and FFClass.py code.
+
+	2.Running Code With Yahoo ID and Fantasy Football Team:
+	   -Rename the FFClass.py to FFClass.py.bak
+ 	   -Rename the FFClassYahooIDRequiredVer.py to FFClass.py
+
+Run the gui.py using the command:
+	./gui.py
+
+****If you chose option 1 above, you will be able to login with what username or password because you will running the code
+    using the test teams and leagues provided.****
