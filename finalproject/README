@@ -19,5 +19,5 @@ Configure the files based on how you wish to run the code.
 Run the gui.py using the command:
 	./gui.py
 
-****If you chose option 1 above, you will be able to login with any username or password because you will running the code
+****If you chose option 1 above, you will be able to login with any username and password because you will run the code
     using the test teams and leagues provided.****
